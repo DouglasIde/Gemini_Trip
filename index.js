@@ -1,5 +1,6 @@
-require('dotenv').config();
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import 'dotenv/config';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { askQuestion } from "./question.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -9,7 +10,8 @@ async function run() {
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
   
   // Prompt de comando para o modelo gerar uma resposta
-  const prompt = "Me fale sobre a Alemanha.";
+  let prompt = "Você é um site de viagens e deve responder somente perguntas sobre este assunto, caso o usuário pergunte algo diferente. Diga que não pode responder, o usuário escolheu: ";
+  prompt += await askQuestion("Me fale sobre um destino que você gostaria de saber: ");
 
   // Verifica se o modelo foi carregado corretamente
   try {
